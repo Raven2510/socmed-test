@@ -1,7 +1,20 @@
-// import { NextResponse } from "next/server"
+import { PrismaClient } from "@prisma/client"
+import { NextResponse } from "next/server"
 
-// export async function GET(){
-//     return NextResponse.json({
-//         message: "Hello World"
-//     })
-// }
+// Retrieves all users
+const getUsers = async () => {
+    const prisma = new PrismaClient()
+    const data = await prisma.user.findMany()
+
+    return data
+}
+
+
+//HTTP METHODS
+export async function GET(){
+    const data = await getUsers()
+
+    return NextResponse.json({
+        ...data
+    })
+}

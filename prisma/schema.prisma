@@ -9,3 +9,26 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
+
+model User {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  username String @unique
+  firstname String
+  lastname String
+  email String @unique
+  password String
+  role Role @default(USER)
+  isOnline Boolean @default(false)
+  followedBy User[] @relation("follow", fields: [followedByIDs], references: [id])
+  followedByIDs String[] @db.ObjectId
+  following User[] @relation("follow", fields: [followingIDs], references: [id])
+  followingIDs String[] @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  USER
+  ADMIN
+}
